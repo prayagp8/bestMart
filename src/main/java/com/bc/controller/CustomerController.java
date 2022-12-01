@@ -1,6 +1,10 @@
+
+
 package com.bc.controller;
 
 import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,8 +19,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bc.exception.CustomerException;
+import com.bc.exception.FeedbackException;
 import com.bc.model.Customer;
+import com.bc.model.Feedback;
 import com.bc.service.CustomerService;
+import com.bc.service.FeedbackService;
+
+
+
+
 
 @RestController
 @RequestMapping("/customers")
@@ -24,6 +35,9 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerService cService;
+	
+	@Autowired
+	private FeedbackService feedbackService;
 
 	@PostMapping("/add")
 	public ResponseEntity<Customer> addCustomer(@RequestBody Customer c) throws CustomerException {
@@ -43,6 +57,31 @@ public class CustomerController {
 	@GetMapping("/view")
 	public ResponseEntity<List<Customer>> viewAllCustomer() throws CustomerException {
 		return new ResponseEntity<List<Customer>>(cService.viewAllCustomer(), HttpStatus.OK);
+	}
+
+
+	///////////////////////////feedback Controller Part
+
+	@GetMapping("/feedbackcustomer/{customerId}")
+	public ResponseEntity<List<Feedback>> findByCustomerId(@PathVariable("customerId") Integer customerId)
+			throws FeedbackException, CustomerException {
+
+		List<Feedback> feedBacks = feedbackService.findByCustomerId(customerId);
+
+		return new ResponseEntity<List<Feedback>>(feedBacks, HttpStatus.OK);
+
+	}
+
+	@GetMapping("/feedbacks")
+	public ResponseEntity<List<Feedback>> viewAllFeedbacks() throws FeedbackException {
+		return new ResponseEntity<List<Feedback>>(feedbackService.viewAllFeedbacks(), HttpStatus.OK);
+	}
+
+	@PostMapping("/feedbacks/{customerId}")
+	public ResponseEntity<Feedback> addFeedback(@Valid @RequestBody Feedback feedback,
+			@PathVariable("customerId") Integer customerId) throws FeedbackException, CustomerException {
+
+		return new ResponseEntity<Feedback>(feedbackService.addFeedback(feedback, customerId), HttpStatus.ACCEPTED);
 	}
 
 }

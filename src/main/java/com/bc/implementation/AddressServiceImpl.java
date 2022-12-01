@@ -55,7 +55,7 @@ public class AddressServiceImpl implements AddressService {
 	public List<Address> viewAllAddress(String key) throws AddressException, SessionLoginException {
 
 		// checking user login status
-		sessionService.checkAdminUserLoginStatus(key);
+		sessionService.checkAnyUserLoginStatus(key);
 
 		List<Address> addresses = addressRepo.findAll();
 		if (addresses.isEmpty())

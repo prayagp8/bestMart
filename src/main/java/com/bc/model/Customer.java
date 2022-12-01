@@ -1,5 +1,6 @@
 package com.bc.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import lombok.Data;
 
@@ -37,5 +39,9 @@ public class Customer {
 	@JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL,mappedBy = "customer")
 	private List<Orders> orders;
+	
+	@JsonIgnore
+	@OneToMany(cascade = CascadeType.ALL)
+	private List<Feedback> feedbackList = new ArrayList<>();
 	
 }
